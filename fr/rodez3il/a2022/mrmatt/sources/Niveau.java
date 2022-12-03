@@ -21,11 +21,28 @@ public class Niveau {
     chargerNiveau(chemin);
   }
 
+  public void chargerNiveau(String chemin){
+    String res = Utils.lireFichier(chemin);
+    String[] splited = res.split("\n");
+    int horizontal = splited[0];
+    int vertical = splited[1];
+    this.plateau = new ObjetPlateau[horizontal][vertical];
+
+    for(int i=0; i<spliter.length; i++){
+      for(int y=0; y<spliter[i].length; y++){
+        char tmp = spliter[i].charAt(y);
+        this.plateau[i][y] = ObjetPlateau.depuisCaractere(tmp);
+      }
+    }
+  }
+
   /**
    * Javadoc à réaliser...
    */
   private void echanger(int sourceX, int sourceY, int destinationX, int destinationY) {
-
+    ObjectPlateau tmp = this.plateau[sourceX][sourceY];
+    this.plateau[sourceX][sourceY] = this.plateau[destinationX][destinationY];
+    this.plateau[destinationX][destinationY] = tmp;
   }
 
   /**
