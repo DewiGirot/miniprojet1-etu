@@ -1,5 +1,13 @@
 package fr.rodez3il.a2022.mrmatt.sources;
 
+import fr.rodez3il.a2022.mrmatt.sources.objets.ObjetPlateau;
+import fr.rodez3il.a2022.mrmatt.sources.objets.Rocher;
+import fr.rodez3il.a2022.mrmatt.sources.objets.Joueur;
+import fr.rodez3il.a2022.mrmatt.sources.objets.Mur;
+import fr.rodez3il.a2022.mrmatt.sources.objets.Pomme;
+import fr.rodez3il.a2022.mrmatt.sources.objets.Herbe;
+import fr.rodez3il.a2022.mrmatt.sources.objets.Vide;
+
 public class Niveau {
 
   // Les objets sur le plateau du niveau
@@ -17,30 +25,43 @@ public class Niveau {
    * @author DewiGirot
    */
   public Niveau(String chemin) {
-    this();
-    chargerNiveau(chemin);
-  }
-
-  public void chargerNiveau(String chemin){
     String res = Utils.lireFichier(chemin);
     String[] splited = res.split("\n");
-    int horizontal = splited[0];
-    int vertical = splited[1];
-    this.plateau = new ObjetPlateau[horizontal][vertical];
+    int taille_horizontale = Integer.parseInt(splited[0]);
+    int taille_verticale = Integer.parseInt(splited[1]);
+    this.plateau = new ObjetPlateau[taille_horizontale][taille_verticale];
 
-    for(int i=0; i<spliter.length; i++){
-      for(int y=0; y<spliter[i].length; y++){
-        char tmp = spliter[i].charAt(y);
-        this.plateau[i][y] = ObjetPlateau.depuisCaractere(tmp);
+    int abscisse = 0;
+    int ordonee = 0;
+    int nbPommes = 0;
+
+    for (int i = 2; i < splited.length; i++) {
+      System.out.println();
+      for (int y = 0; y < splited[i].length(); y++) {
+        ordonee = 0;
+        char tmp = splited[i].charAt(y);
+        ObjetPlateau o = ObjetPlateau.depuisCaractere(tmp);
+        System.out.print(o.afficher());
+        if(tmp == 'H'){
+          this.joueurX = abscisse;
+          this.joueurX = ordonee;
+        }
+        if(tmp == '+'){
+          nbPommes++;
+        }
+        this.plateau[joueurX][joueurY] = o;
+        ordonee++;
       }
+      abscisse++;
     }
+    // System.out.println("Nombre de pommes : " + nbPommes);
   }
 
   /**
    * Javadoc à réaliser...
    */
   private void echanger(int sourceX, int sourceY, int destinationX, int destinationY) {
-    ObjectPlateau tmp = this.plateau[sourceX][sourceY];
+    ObjetPlateau tmp = this.plateau[sourceX][sourceY];
     this.plateau[sourceX][sourceY] = this.plateau[destinationX][destinationY];
     this.plateau[destinationX][destinationY] = tmp;
   }
@@ -71,10 +92,33 @@ public class Niveau {
   // Illustrez les Javadocs manquantes lorsque vous coderez ces méthodes !
 
   public boolean enCours() {
+    return false;
   }
 
   // Joue la commande C passée en paramètres
   public boolean jouer(Commande c) {
+    return false;
+  }
+
+  /**
+   * Regarde si le déplacement demandé est possible
+   */
+  public boolean deplacementPossible(int dx, int dy){
+    int futurX = this.joueurX + dx;
+    int futurY = this.joueurY + dy;
+
+    if((dx!=0 || dy!=0) && (futurX>=0 && futurY>=0) && futurX < plateau.length && futurY < plateau[0].length()){
+      if(this.plateau[futurX][futurY].estMarchable()){
+        return true;
+      }
+    }
+  }
+
+  /**
+   * Deplacement effectif du joueur
+   */
+  public void deplacer(int deltaX, int deltaY){
+    
   }
 
   /**
@@ -86,6 +130,7 @@ public class Niveau {
   /**
    */
   public boolean estIntermediaire() {
+    return true;
   }
 
 }

@@ -1,6 +1,9 @@
 package fr.rodez3il.a2022.mrmatt.sources.objets;
 
-public class Herbe implements ObjetPlateau {
+import fr.rodez3il.a2022.mrmatt.sources.objets.ObjetPlateau;
+import fr.rodez3il.a2022.mrmatt.sources.Niveau;
+
+public class Herbe extends ObjetPlateau {
 
   public Herbe() {
   }
@@ -9,20 +12,8 @@ public class Herbe implements ObjetPlateau {
     return '-';
   }
 
-  public boolean estVide() {
-    return false;
-  }
-
   public boolean estMarchable() {
     return true;
-  }
-
-  public boolean estPoussable() {
-    return false;
-  }
-
-  public boolean estGlissant() {
-    return false;
   }
 
   public void visiterPlateauCalculEtatSuivant(Niveau niveau, int x, int y) {

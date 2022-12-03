@@ -1,20 +1,15 @@
 package fr.rodez3il.a2022.mrmatt.sources.objets;
 
-public class Rocher implements ObjetPlateau {
+import fr.rodez3il.a2022.mrmatt.sources.objets.ObjetPlateau;
+import fr.rodez3il.a2022.mrmatt.sources.Niveau;
+
+public class Rocher extends ObjetPlateau {
 
   public Rocher() {
   }
 
   public char afficher() {
     return '*';
-  }
-
-  public boolean estVide() {
-    return false;
-  }
-
-  public boolean estMarchable() {
-    return false;
   }
 
   public boolean estPoussable() {

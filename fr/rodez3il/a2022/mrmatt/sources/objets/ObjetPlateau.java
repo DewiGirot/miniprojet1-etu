@@ -38,18 +38,21 @@ public abstract class ObjetPlateau {
   public abstract char afficher();
 
   public boolean estVide() {
+    return false;
   }
 
   public boolean estMarchable() {
+    return false;
   }
 
   public boolean estPoussable() {
+    return false;
   }
 
   public boolean estGlissant() {
+    return false;
   }
 
-  public void visiterPlateauCalculEtatSuivant(Niveau niveau, int x, int y) {
-  }
+  public void visiterPlateauCalculEtatSuivant(Niveau niveau, int x, int y) {}
 
 }

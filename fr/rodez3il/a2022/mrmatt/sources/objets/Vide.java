@@ -1,6 +1,9 @@
 package fr.rodez3il.a2022.mrmatt.sources.objets;
 
-public class Vide implements ObjetPlateau {
+import fr.rodez3il.a2022.mrmatt.sources.objets.ObjetPlateau;
+import fr.rodez3il.a2022.mrmatt.sources.Niveau;
+
+public class Vide extends ObjetPlateau {
 
   public Vide() {
   }
@@ -15,14 +18,6 @@ public class Vide implements ObjetPlateau {
 
   public boolean estMarchable() {
     return true;
-  }
-
-  public boolean estPoussable() {
-    return false;
-  }
-
-  public boolean estGlissant() {
-    return false;
   }
 
   public void visiterPlateauCalculEtatSuivant(Niveau niveau, int x, int y) {
