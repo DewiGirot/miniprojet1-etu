@@ -20,11 +20,11 @@
 
   **Calcul de l'état suivant -  Petit problème**
    - Question : quel est le problème d'une telle implémentation, d'après le cours ?
-   - Réponse :
+   - Réponse : Puisque l'utilisation de instanceOf pose problème. En effet puisque que dans un design qui utilise l'héritage, si on rajoute une classe, on doit changer des choses dans les autres classes qui héritent de la même classe.
 
   **Question finale**
    - Question : pourquoi la méthode etatSuivant() est-elle publique ?
-   - Réponse :
+   - Réponse : La méthode etatSuivant() est publique puisque dans la classe Pomme, nous l'utilisons.
 
   
   ## Retour personnel sur les points paru difficiles

@@ -1,6 +1,7 @@
 package fr.rodez3il.a2022.mrmatt.sources;
 
 import fr.rodez3il.a2022.mrmatt.sources.objets.ObjetPlateau;
+import fr.rodez3il.a2022.mrmatt.sources.objets.EtatRocher;
 import fr.rodez3il.a2022.mrmatt.sources.objets.Rocher;
 import fr.rodez3il.a2022.mrmatt.sources.objets.Joueur;
 import fr.rodez3il.a2022.mrmatt.sources.objets.Mur;
@@ -74,25 +75,50 @@ public class Niveau {
     // TODO
   }
 
-  // TODO : patron visiteur du Rocher...
+  // TODO : patron visiteur du Rocher
   public void etatSuivantVisiteur(Rocher r, int x, int y) {
-
+    if (r.getEtat() == EtatRocher.FIXE) {
+      if (this.plateau[x][y + 1].estVide()) {
+        r.setEtat(EtatRocher.CHUTE);
+      }
+    }
+    if (r.getEtat() == EtatRocher.CHUTE) {
+      if (this.plateau[x][y + 1].afficher() == '#') {
+        r.setEtat(EtatRocher.FIXE);
+      } else if (this.plateau[x][y + 1].afficher() == ' ') {
+        echanger(x, y, x, y + 1);
+      } else if (this.plateau[x][y + 1].afficher() == 'H') {
+        // Erreur
+      } else if (this.plateau[x][y + 1].estGlissant()) {
+        if (this.plateau[x - 1][y + 1].estVide()) {
+          echanger(x, y, x - 1, y + 1);
+        } else if (this.plateau[x + 1][y + 1].estVide()) {
+          echanger(x, y, x + 1, y + 1);
+        } else {
+          r.setEtat(EtatRocher.FIXE);
+        }
+      }
+    }
   }
 
   /**
    * Calcule l'état suivant du niveau.
    * ........
    * 
-   * @author
+   * @author DewiGirot
    */
   public void etatSuivant() {
-    // TODO
+    for (int x = plateau.length - 1; x >= 0; x--) {
+      for (int y = plateau[x].length - 1; y >= 0; y--) {
+        plateau[x][y].visiterPlateauCalculEtatSuivant(this, x, y);
+      }
+    }
   }
 
   // Illustrez les Javadocs manquantes lorsque vous coderez ces méthodes !
 
   public boolean enCours() {
-    return false;
+    return true;
   }
 
   // Joue la commande C passée en paramètres
@@ -156,6 +182,7 @@ public class Niveau {
    * Affiche l'état final (gagné ou perdu) une fois le jeu terminé.
    */
   public void afficherEtatFinal() {
+    System.out.println("Bravo vous avez gagner");
   }
 
   /**
