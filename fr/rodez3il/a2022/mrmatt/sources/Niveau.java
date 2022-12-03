@@ -42,11 +42,11 @@ public class Niveau {
         char tmp = splited[i].charAt(y);
         ObjetPlateau o = ObjetPlateau.depuisCaractere(tmp);
         System.out.print(o.afficher());
-        if(tmp == 'H'){
+        if (tmp == 'H') {
           this.joueurX = abscisse;
           this.joueurX = ordonee;
         }
-        if(tmp == '+'){
+        if (tmp == '+') {
           nbPommes++;
         }
         this.plateau[joueurX][joueurY] = o;
@@ -97,28 +97,59 @@ public class Niveau {
 
   // Joue la commande C passée en paramètres
   public boolean jouer(Commande c) {
-    return false;
+    switch (c) {
+      case HAUT:
+        deplacer(0, -1);
+        break;
+      case GAUCHE:
+        deplacer(-1, 0);
+        break;
+      case BAS:
+        deplacer(0, 1);
+        break;
+      case DROITE:
+        deplacer(1, 0);
+        break;
+      case ANNULER:
+        break;
+      case QUITTER:
+        break;
+      case ERREUR:
+        break;
+    }
+    return true;
   }
 
   /**
    * Regarde si le déplacement demandé est possible
    */
-  public boolean deplacementPossible(int dx, int dy){
+  private boolean deplacementPossible(int dx, int dy) {
     int futurX = this.joueurX + dx;
     int futurY = this.joueurY + dy;
 
-    if((dx!=0 || dy!=0) && (futurX>=0 && futurY>=0) && futurX < plateau.length && futurY < plateau[0].length()){
-      if(this.plateau[futurX][futurY].estMarchable()){
+    if ((dx != 0 || dy != 0) && (futurX >= 0 && futurY >= 0) && futurX < plateau.length && futurY < plateau[0].length) {
+      if (this.plateau[futurX][futurY].estMarchable()) {
         return true;
       }
     }
+    return false;
   }
 
   /**
    * Deplacement effectif du joueur
    */
-  public void deplacer(int deltaX, int deltaY){
-    
+  private void deplacer(int deltaX, int deltaY) {
+    if (deplacementPossible(deltaX, deltaY) == true) {
+      int futurX = this.joueurX + deltaX;
+      int futurY = this.joueurY + deltaY;
+      // increment deplacementJoueur
+      if (this.plateau[futurX][futurY].afficher() == '+') {
+        // To Do with apple to increment counter
+      }
+      echanger(this.joueurX, this.joueurY, futurX, futurY);
+      this.plateau[futurX][futurY] = new Vide();
+    }
+    // else if estPoussable
   }
 
   /**

@@ -16,7 +16,7 @@
 
   **Classe Niveau - Déplacement trivial**
    - Question : pourquoi ces deux méthodes sont-elles privées ?
-   - Réponse :
+   - Réponse : Les deux méthodes sont privées puisque l'on souhaite que le joueur ne se déplace seulement grâce aux touches authorisées (ex: 8 pour déplacement vers le haut).
 
   **Calcul de l'état suivant -  Petit problème**
    - Question : quel est le problème d'une telle implémentation, d'après le cours ?
