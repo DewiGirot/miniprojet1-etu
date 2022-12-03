@@ -5,18 +5,12 @@ import fr.rodez3il.a2022.mrmatt.sources.Niveau;
 
 public class Herbe extends ObjetPlateau {
 
-  public Herbe() {
-  }
-
   public char afficher() {
     return '-';
   }
 
   public boolean estMarchable() {
     return true;
-  }
-
-  public void visiterPlateauCalculEtatSuivant(Niveau niveau, int x, int y) {
   }
 
 }

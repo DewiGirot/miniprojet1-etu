@@ -33,26 +33,22 @@ public class Niveau {
     this.plateau = new ObjetPlateau[taille_horizontale][taille_verticale];
 
     int abscisse = 0;
-    int ordonee = 0;
-    int nbPommes = 0;
+    int ordonnee = 0;
 
     for (int i = 2; i < splited.length; i++) {
-      System.out.println();
       for (int y = 0; y < splited[i].length(); y++) {
-        ordonee = 0;
         char tmp = splited[i].charAt(y);
         ObjetPlateau o = ObjetPlateau.depuisCaractere(tmp);
         System.out.print(o.afficher());
         if (tmp == 'H') {
           this.joueurX = abscisse;
-          this.joueurX = ordonee;
+          this.joueurY = ordonnee;
         }
-        if (tmp == '+') {
-          nbPommes++;
-        }
-        this.plateau[joueurX][joueurY] = o;
-        ordonee++;
+        this.plateau[ordonnee][abscisse] = o;
+        ordonnee++;
       }
+      System.out.println();
+      ordonnee = 0;
       abscisse++;
     }
     // System.out.println("Nombre de pommes : " + nbPommes);
@@ -69,10 +65,17 @@ public class Niveau {
 
   /**
    * Produit une sortie du niveau sur la sortie standard.
-   * ................
    */
   public void afficher() {
-    // TODO
+    for (int i = 0; i < this.plateau[0].length; i++) {
+      for (int y = 0; y < this.plateau.length; y++) {
+        System.out.print(this.plateau[y][i].afficher());
+      }
+      System.out.println();
+    }
+
+    System.out.println("Pommes restantes : ");
+    System.out.println("Déplacements : ");
   }
 
   // TODO : patron visiteur du Rocher
