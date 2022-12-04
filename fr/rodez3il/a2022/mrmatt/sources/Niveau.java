@@ -172,12 +172,12 @@ public class Niveau {
     int futurX = this.joueurX + dx;
     int futurY = this.joueurY + dy;
 
-    if ((dx != 0 || dy != 0) && (futurX >= 0 && futurY >= 0) && futurX < plateau[0].length && futurY < plateau.length) {
-
+    if ((dx != 0 || dy != 0) && (futurX >= 0 && futurY >= 0) && futurX < plateau.length && futurY < plateau[0].length) {
+      
       System.out.println("DeplacementPossible : x :" + futurX + " y :" + futurY);
       System.out.println("Joueur : x :" + this.joueurX + " y :" + this.joueurY);
-      System.out.println("Marchable ? " + this.plateau[futurY][futurX].estMarchable());
-      if (this.plateau[futurY][futurX].estMarchable()) {
+      
+      if (this.plateau[futurX][futurY].estMarchable()) {
         return true;
       }
     }
@@ -192,9 +192,7 @@ public class Niveau {
       int futurX = this.joueurX + deltaX;
       int futurY = this.joueurY + deltaY;
       this.deplacement++;
-      if(this.plateau[futurY][futurX].afficher() == '-' || this.plateau[futurY][futurX].afficher() == '+'){
-        this.plateau[futurY][futurX] = new Vide();
-      }      
+      this.plateau[futurX][futurY] = new Vide();
       echanger(this.joueurX, this.joueurY, futurX, futurY);
       this.joueurX = futurX;
       this.joueurY = futurY;
