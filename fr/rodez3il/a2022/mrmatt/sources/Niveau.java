@@ -16,6 +16,9 @@ public class Niveau {
   // Position du joueur
   private int joueurX;
   private int joueurY;
+  private int nbPommes;
+  private boolean intermediaire;
+  private int deplacement;
 
   // Autres attributs que vous jugerez nécessaires...
 
@@ -32,6 +35,9 @@ public class Niveau {
     int taille_verticale = Integer.parseInt(splited[1]);
     this.plateau = new ObjetPlateau[taille_horizontale][taille_verticale];
 
+    this.nbPommes = 0;
+    this.intermediaire = false;
+    this.deplacement = 0;
     int abscisse = 0;
     int ordonnee = 0;
 
@@ -44,6 +50,9 @@ public class Niveau {
           this.joueurX = abscisse;
           this.joueurY = ordonnee;
         }
+        if (tmp == '+') {
+          this.nbPommes++;
+        }
         this.plateau[ordonnee][abscisse] = o;
         ordonnee++;
       }
@@ -51,34 +60,37 @@ public class Niveau {
       ordonnee = 0;
       abscisse++;
     }
-    // System.out.println("Nombre de pommes : " + nbPommes);
   }
 
   /**
    * Javadoc à réaliser...
    */
   private void echanger(int sourceX, int sourceY, int destinationX, int destinationY) {
-    ObjetPlateau tmp = this.plateau[sourceX][sourceY];
-    this.plateau[sourceX][sourceY] = this.plateau[destinationX][destinationY];
-    this.plateau[destinationX][destinationY] = tmp;
+    ObjetPlateau tmp = this.plateau[sourceY][sourceX];
+    this.plateau[sourceY][sourceX] = this.plateau[destinationY][destinationX];
+    this.plateau[destinationY][destinationX] = tmp;
   }
 
   /**
    * Produit une sortie du niveau sur la sortie standard.
    */
   public void afficher() {
+    this.nbPommes = 0;
     for (int i = 0; i < this.plateau[0].length; i++) {
       for (int y = 0; y < this.plateau.length; y++) {
         System.out.print(this.plateau[y][i].afficher());
+        if (this.plateau[y][i].afficher() == '+') {
+          this.nbPommes++;
+        }
       }
       System.out.println();
     }
 
-    System.out.println("Pommes restantes : ");
-    System.out.println("Déplacements : ");
+    System.out.println("Pommes restantes : " + this.nbPommes);
+    System.out.println("Déplacements : " + this.deplacement);
   }
 
-  // TODO : patron visiteur du Rocher
+  // Patron visiteur du Rocher.
   public void etatSuivantVisiteur(Rocher r, int x, int y) {
     if (r.getEtat() == EtatRocher.FIXE) {
       if (this.plateau[x][y + 1].estVide()) {
@@ -102,15 +114,16 @@ public class Niveau {
         }
       }
     }
+    this.intermediaire = r.getEtat() == EtatRocher.CHUTE ? true : false;
   }
 
   /**
    * Calcule l'état suivant du niveau.
-   * ........
    * 
    * @author DewiGirot
    */
   public void etatSuivant() {
+    this.intermediaire = false;
     for (int x = plateau.length - 1; x >= 0; x--) {
       for (int y = plateau[x].length - 1; y >= 0; y--) {
         plateau[x][y].visiterPlateauCalculEtatSuivant(this, x, y);
@@ -121,23 +134,26 @@ public class Niveau {
   // Illustrez les Javadocs manquantes lorsque vous coderez ces méthodes !
 
   public boolean enCours() {
-    return true;
+    if (this.nbPommes != 0)
+      return true;
+    else
+      return false;
   }
 
   // Joue la commande C passée en paramètres
   public boolean jouer(Commande c) {
     switch (c) {
       case HAUT:
-        deplacer(0, -1);
-        break;
-      case GAUCHE:
         deplacer(-1, 0);
         break;
+      case GAUCHE:
+        deplacer(0, -1);
+        break;
       case BAS:
-        deplacer(0, 1);
+        deplacer(1, 0);
         break;
       case DROITE:
-        deplacer(1, 0);
+        deplacer(0, 1);
         break;
       case ANNULER:
         break;
@@ -157,6 +173,10 @@ public class Niveau {
     int futurY = this.joueurY + dy;
 
     if ((dx != 0 || dy != 0) && (futurX >= 0 && futurY >= 0) && futurX < plateau.length && futurY < plateau[0].length) {
+      
+      System.out.println("DeplacementPossible : x :" + futurX + " y :" + futurY);
+      System.out.println("Joueur : x :" + this.joueurX + " y :" + this.joueurY);
+      
       if (this.plateau[futurX][futurY].estMarchable()) {
         return true;
       }
@@ -171,12 +191,11 @@ public class Niveau {
     if (deplacementPossible(deltaX, deltaY) == true) {
       int futurX = this.joueurX + deltaX;
       int futurY = this.joueurY + deltaY;
-      // increment deplacementJoueur
-      if (this.plateau[futurX][futurY].afficher() == '+') {
-        // To Do with apple to increment counter
-      }
-      echanger(this.joueurX, this.joueurY, futurX, futurY);
+      this.deplacement++;
       this.plateau[futurX][futurY] = new Vide();
+      echanger(this.joueurX, this.joueurY, futurX, futurY);
+      this.joueurX = futurX;
+      this.joueurY = futurY;
     }
     // else if estPoussable
   }
@@ -185,13 +204,16 @@ public class Niveau {
    * Affiche l'état final (gagné ou perdu) une fois le jeu terminé.
    */
   public void afficherEtatFinal() {
-    System.out.println("Bravo vous avez gagner");
+    if (this.enCours() == false)
+      System.out.println("Bravo, vous avez gagné !");
+    else
+      System.out.println("Vous avez perdu :(");
   }
 
   /**
    */
   public boolean estIntermediaire() {
-    return true;
+    return this.enCours() && this.intermediaire;
   }
 
 }

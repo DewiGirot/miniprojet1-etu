@@ -13,6 +13,5 @@ public enum Commande {
 	DROITE, // 6
 	ANNULER, // a
 	QUITTER, // q
-	// Erreur de lecture
-	ERREUR;
+	ERREUR; // Erreur de lecture
 }
