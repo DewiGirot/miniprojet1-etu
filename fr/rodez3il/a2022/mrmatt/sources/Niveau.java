@@ -11,7 +11,11 @@ import fr.rodez3il.a2022.mrmatt.sources.objets.Vide;
 
 public class Niveau {
 
-  // Les objets sur le plateau du niveau
+  /*
+   * Les objets sur le plateau du niveau
+   * 
+   * @Author DewiGirot
+   */
   private ObjetPlateau[][] plateau;
   // Position du joueur
   private int joueurX;
@@ -20,13 +24,10 @@ public class Niveau {
   private boolean intermediaire;
   private int deplacement;
 
-  // Autres attributs que vous jugerez nécessaires...
-
   /**
    * Constructeur public : crée un niveau depuis un fichier.
    * 
-   * @param chemin .....
-   * @author DewiGirot
+   * @Author DewiGirot
    */
   public Niveau(String chemin) {
     String res = Utils.lireFichier(chemin);
@@ -63,7 +64,9 @@ public class Niveau {
   }
 
   /**
-   * Javadoc à réaliser...
+   * Permet de permuter deux objets du plateau
+   * 
+   * @Author DewiGirot
    */
   private void echanger(int sourceX, int sourceY, int destinationX, int destinationY) {
     ObjetPlateau tmp = this.plateau[sourceY][sourceX];
@@ -73,6 +76,8 @@ public class Niveau {
 
   /**
    * Produit une sortie du niveau sur la sortie standard.
+   * 
+   * @Author DewiGirot
    */
   public void afficher() {
     this.nbPommes = 0;
@@ -90,7 +95,11 @@ public class Niveau {
     System.out.println("Déplacements : " + this.deplacement);
   }
 
-  // Patron visiteur du Rocher.
+  /*
+   * Patron visiteur du Rocher.
+   * 
+   * @Author DewiGirot
+   */
   public void etatSuivantVisiteur(Rocher r, int x, int y) {
     if (r.getEtat() == EtatRocher.FIXE) {
       if (this.plateau[x][y + 1].estVide()) {
@@ -114,7 +123,11 @@ public class Niveau {
         }
       }
     }
-    this.intermediaire = r.getEtat() == EtatRocher.CHUTE ? true : false;
+    if (r.getEtat() == EtatRocher.CHUTE) {
+      this.intermediaire = true;
+    } else {
+      this.intermediaire = false;
+    }
   }
 
   /**
@@ -131,8 +144,13 @@ public class Niveau {
     }
   }
 
-  // Illustrez les Javadocs manquantes lorsque vous coderez ces méthodes !
-
+  /*
+   * Permet de savoir si la partie est en cours ou si elle est finie
+   * 
+   * @Author DewiGirot
+   * 
+   * @return retourne vrai si le nombre de pommes est égal à 0
+   */
   public boolean enCours() {
     if (this.nbPommes != 0)
       return true;
@@ -140,7 +158,14 @@ public class Niveau {
       return false;
   }
 
-  // Joue la commande C passée en paramètres
+  /*
+   * Joue la commande C passée en paramètres, le but de cet fonction est
+   * d'utiliser la fonction "déplacer".
+   * 
+   * @Author DewiGirot
+   * 
+   * @return retourne vrai dans tous les cas
+   */
   public boolean jouer(Commande c) {
     switch (c) {
       case HAUT:
@@ -167,6 +192,10 @@ public class Niveau {
 
   /**
    * Regarde si le déplacement demandé est possible
+   * 
+   * @Author DewiGirot
+   * @return retourne vrai si le déplacement demandé est possible sinon retourne
+   *         faux.
    */
   private boolean deplacementPossible(int dx, int dy) {
     int futurX = this.joueurX + dx;
@@ -176,7 +205,6 @@ public class Niveau {
 
       System.out.println("DeplacementPossible : x :" + futurX + " y :" + futurY);
       System.out.println("Joueur : x :" + this.joueurX + " y :" + this.joueurY);
-      System.out.println("Marchable ? " + this.plateau[futurY][futurX].estMarchable());
       if (this.plateau[futurY][futurX].estMarchable()) {
         return true;
       }
@@ -186,15 +214,17 @@ public class Niveau {
 
   /**
    * Deplacement effectif du joueur
+   * 
+   * @Author DewiGirot
    */
   private void deplacer(int deltaX, int deltaY) {
     if (deplacementPossible(deltaX, deltaY) == true) {
       int futurX = this.joueurX + deltaX;
       int futurY = this.joueurY + deltaY;
       this.deplacement++;
-      if(this.plateau[futurY][futurX].afficher() == '-' || this.plateau[futurY][futurX].afficher() == '+'){
+      if (this.plateau[futurY][futurX].afficher() == '-' || this.plateau[futurY][futurX].afficher() == '+') {
         this.plateau[futurY][futurX] = new Vide();
-      }      
+      }
       echanger(this.joueurX, this.joueurY, futurX, futurY);
       this.joueurX = futurX;
       this.joueurY = futurY;
@@ -204,6 +234,10 @@ public class Niveau {
 
   /**
    * Affiche l'état final (gagné ou perdu) une fois le jeu terminé.
+   * 
+   * @Author DewiGirot
+   * @return retourne "gagné" si la partie n'est plus en cours sinon retourne
+   *         "perdu"
    */
   public void afficherEtatFinal() {
     if (this.enCours() == false)
@@ -213,9 +247,14 @@ public class Niveau {
   }
 
   /**
+   * Fonction qui sert à savoir si le jeu est en état intermediaire, c'est à dire
+   * s'il reste des rochers en état de chute.
+   * 
+   * @Author DewiGirot
+   * @return retourne vrai si la partie est encore en cours et s'il
+   *         reste des objets en état de chute
    */
   public boolean estIntermediaire() {
     return this.enCours() && this.intermediaire;
   }
-
 }
