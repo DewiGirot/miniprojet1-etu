@@ -2,7 +2,7 @@
 
   ## Ce que j'ai réalisé 
   
-  bla bla bla.
+  J'ai tout réalisé dans ce code, certains m'ont aidé (je les ai nommés dans le fichier HELPERS.md), mais ce projet m'a paru difficile sur certains points puisqu'il est facile de s'embrouillé.
 
   ## Réponses aux questions
   
@@ -29,6 +29,6 @@
   
   ## Retour personnel sur les points paru difficiles
   
-  Ce qui m'a semblé difficile a été ...
+  Ce qui m'a semblé difficile a été le constructeur de la classe Niveau, l'état du rocher et également l'utilisation des tableau de l'objet plateau.
   
   ## Autre commentaire

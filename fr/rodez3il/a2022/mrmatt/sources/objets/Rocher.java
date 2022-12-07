@@ -9,6 +9,7 @@ public class Rocher extends ObjetPlateau {
   private EtatRocher etat;
 
   public Rocher() {
+    this.etat = EtatRocher.FIXE;
   }
 
   public EtatRocher getEtat() {

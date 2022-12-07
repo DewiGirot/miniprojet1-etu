@@ -110,7 +110,11 @@ public class Niveau {
       if (this.plateau[x][y + 1].afficher() == '#') {
         r.setEtat(EtatRocher.FIXE);
       } else if (this.plateau[x][y + 1].afficher() == ' ') {
-        echanger(x, y, x, y + 1);
+        System.out.println("EtatSuite" + this.plateau[x][y].afficher());
+        System.out.println("EtatSuite+1" + this.plateau[x][y + 1].afficher());
+        echanger(y, x, y + 1, x);
+        System.out.println("EtatSuite" + this.plateau[x][y].afficher());
+        System.out.println("EtatSuite+1" + this.plateau[x][y + 1].afficher());
       } else if (this.plateau[x][y + 1].afficher() == 'H') {
         // Erreur
       } else if (this.plateau[x][y + 1].estGlissant()) {
@@ -122,6 +126,7 @@ public class Niveau {
           r.setEtat(EtatRocher.FIXE);
         }
       }
+
     }
     if (r.getEtat() == EtatRocher.CHUTE) {
       this.intermediaire = true;
