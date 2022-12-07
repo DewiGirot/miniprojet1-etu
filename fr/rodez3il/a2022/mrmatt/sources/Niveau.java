@@ -23,6 +23,7 @@ public class Niveau {
   private int nbPommes;
   private boolean intermediaire;
   private int deplacement;
+  private boolean estEnCours;
 
   /**
    * Constructeur public : crée un niveau depuis un fichier.
@@ -38,6 +39,7 @@ public class Niveau {
 
     this.nbPommes = 0;
     this.intermediaire = false;
+    this.estEnCours = true;
     this.deplacement = 0;
     int abscisse = 0;
     int ordonnee = 0;
@@ -91,6 +93,10 @@ public class Niveau {
       System.out.println();
     }
 
+    if (nbPommes == 0) {
+      this.estEnCours = false;
+    }
+
     System.out.println("Pommes restantes : " + this.nbPommes);
     System.out.println("Déplacements : " + this.deplacement);
   }
@@ -107,23 +113,21 @@ public class Niveau {
       }
     }
     if (r.getEtat() == EtatRocher.CHUTE) {
-      if (this.plateau[x][y + 1].afficher() == '#') {
-        r.setEtat(EtatRocher.FIXE);
-      } else if (this.plateau[x][y + 1].afficher() == ' ') {
-        System.out.println("EtatSuite" + this.plateau[x][y].afficher());
-        System.out.println("EtatSuite+1" + this.plateau[x][y + 1].afficher());
-        echanger(y, x, y + 1, x);
-        System.out.println("EtatSuite" + this.plateau[x][y].afficher());
-        System.out.println("EtatSuite+1" + this.plateau[x][y + 1].afficher());
-      } else if (this.plateau[x][y + 1].afficher() == 'H') {
-        // Erreur
-      } else if (this.plateau[x][y + 1].estGlissant()) {
-        if (this.plateau[x - 1][y + 1].estVide()) {
-          echanger(x, y, x - 1, y + 1);
-        } else if (this.plateau[x + 1][y + 1].estVide()) {
-          echanger(x, y, x + 1, y + 1);
-        } else {
+      if (y + 1 < this.plateau[x].length) {
+        if (this.plateau[x][y + 1].afficher() == '#') {
           r.setEtat(EtatRocher.FIXE);
+        } else if (this.plateau[x][y + 1].afficher() == ' ') {
+          echanger(y, x, y + 1, x);
+        } else if (this.plateau[x][y + 1].afficher() == 'H') {
+          // Erreur
+        } else if (this.plateau[x][y + 1].estGlissant()) {
+          if (this.plateau[x - 1][y + 1].estVide()) {
+            echanger(y, x, y + 1, x - 1);
+          } else if (this.plateau[x + 1][y + 1].estVide()) {
+            echanger(y, x, y + 1, x + 1);
+          } else {
+            r.setEtat(EtatRocher.FIXE);
+          }
         }
       }
 
@@ -157,10 +161,7 @@ public class Niveau {
    * @return retourne vrai si le nombre de pommes est égal à 0
    */
   public boolean enCours() {
-    if (this.nbPommes != 0)
-      return true;
-    else
-      return false;
+    return this.estEnCours;
   }
 
   /*
@@ -207,9 +208,6 @@ public class Niveau {
     int futurY = this.joueurY + dy;
 
     if ((dx != 0 || dy != 0) && (futurX >= 0 && futurY >= 0) && futurX < plateau[0].length && futurY < plateau.length) {
-
-      System.out.println("DeplacementPossible : x :" + futurX + " y :" + futurY);
-      System.out.println("Joueur : x :" + this.joueurX + " y :" + this.joueurY);
       if (this.plateau[futurY][futurX].estMarchable()) {
         return true;
       }
