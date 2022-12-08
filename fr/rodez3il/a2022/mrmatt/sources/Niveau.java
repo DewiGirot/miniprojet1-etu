@@ -24,6 +24,7 @@ public class Niveau {
   private boolean intermediaire;
   private int deplacement;
   private boolean estEnCours;
+  private boolean estEnVie;
 
   /**
    * Constructeur public : crée un niveau depuis un fichier.
@@ -40,6 +41,7 @@ public class Niveau {
     this.nbPommes = 0;
     this.intermediaire = false;
     this.estEnCours = true;
+    this.estEnVie = true;
     this.deplacement = 0;
     int abscisse = 0;
     int ordonnee = 0;
@@ -92,7 +94,7 @@ public class Niveau {
       }
       System.out.println();
     }
-
+    
     if (nbPommes == 0) {
       this.estEnCours = false;
     }
@@ -119,7 +121,7 @@ public class Niveau {
         } else if (this.plateau[x][y + 1].afficher() == ' ') {
           echanger(y, x, y + 1, x);
         } else if (this.plateau[x][y + 1].afficher() == 'H') {
-          // Erreur
+          this.estEnVie = false;
         } else if (this.plateau[x][y + 1].estGlissant()) {
           if (this.plateau[x - 1][y + 1].estVide()) {
             echanger(y, x, y + 1, x - 1);
@@ -210,6 +212,9 @@ public class Niveau {
       if (this.plateau[futurY][futurX].estMarchable()) {
         return true;
       }
+      if(this.plateau[futurY][futurX].estPoussable() && (this.plateau[futurY-1][futurX].estVide() || this.plateau[futurY+1][futurX].estVide())){
+        return true;
+      }
     }
     return false;
   }
@@ -217,21 +222,43 @@ public class Niveau {
   /**
    * Deplacement effectif du joueur
    * 
+   * @param : deltaX et deltaY sont les positions du joueur + le delta correspondant (abscisse ou ordonnée) que l'on souhaite déplacer
+   *
    * @Author DewiGirot
    */
   private void deplacer(int deltaX, int deltaY) {
+    int futurX = this.joueurX + deltaX;
+    int futurY = this.joueurY + deltaY;
     if (deplacementPossible(deltaX, deltaY) == true) {
-      int futurX = this.joueurX + deltaX;
-      int futurY = this.joueurY + deltaY;
-      this.deplacement++;
-      if (this.plateau[futurY][futurX].afficher() == '-' || this.plateau[futurY][futurX].afficher() == '+') {
-        this.plateau[futurY][futurX] = new Vide();
+      if(this.plateau[futurY][futurX].estMarchable()){
+        if (this.plateau[futurY][futurX].afficher() == '-' || this.plateau[futurY][futurX].afficher() == '+') {
+          this.plateau[futurY][futurX] = new Vide();
+        }
+        echanger(this.joueurX, this.joueurY, futurX, futurY);
+        this.joueurX = futurX;
+        this.joueurY = futurY;
+      }else if (this.plateau[futurY][futurX].estPoussable()) {
+        if(deltaY<0){
+          if(this.plateau[futurY-1][futurX].estVide()){
+            echanger(futurX, futurY, futurX, futurY-1);
+            this.plateau[futurY][futurX] = new Vide();
+            echanger(this.joueurX, this.joueurY, futurX, futurY);
+            this.joueurX = futurX;
+            this.joueurY = futurY;
+          }
+        }
+        if(deltaY>0){
+          if(this.plateau[futurY+1][futurX].estVide()){
+            echanger(futurX, futurY, futurX, futurY+1);
+            this.plateau[futurY][futurX] = new Vide();
+            echanger(this.joueurX, this.joueurY, futurX, futurY);
+            this.joueurX = futurX;
+            this.joueurY = futurY;
+          }
+        }
       }
-      echanger(this.joueurX, this.joueurY, futurX, futurY);
-      this.joueurX = futurX;
-      this.joueurY = futurY;
+      this.deplacement++; 
     }
-    // else if estPoussable
   }
 
   /**
@@ -242,10 +269,13 @@ public class Niveau {
    *         "perdu"
    */
   public void afficherEtatFinal() {
-    if (this.enCours() == false)
-      System.out.println("Bravo, vous avez gagné !");
-    else
-      System.out.println("Vous avez perdu :(");
+    if(this.estEnVie == true){
+      if (this.enCours() == false)
+        System.out.println("Bravo, vous avez gagné !");
+    }else{
+      System.out.println("Vous êtes mort");
+    }
+    
   }
 
   /**
