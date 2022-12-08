@@ -190,7 +190,8 @@ public class Niveau {
       case ANNULER:
         break;
       case QUITTER:
-        break;
+        this.estEnCours = false;
+        afficherEtatFinal();
       case ERREUR:
         break;
     }
@@ -272,6 +273,8 @@ public class Niveau {
     if(this.estEnVie == true){
       if (this.enCours() == false)
         System.out.println("Bravo, vous avez gagné !");
+      else if (this.enCours() == false)
+        System.out.println("Vous avez perdu");
     }else{
       System.out.println("Vous êtes mort");
     }
