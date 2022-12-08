@@ -16,20 +16,30 @@ public class Niveau {
    * 
    * @Author DewiGirot
    */
+  // Plateau du jeu
   private ObjetPlateau[][] plateau;
-  // Position du joueur
+  // Positions du joueur
   private int joueurX;
   private int joueurY;
+  // Nombre de pommes restantes sur le plateau
   private int nbPommes;
+  // Nombre de déplacements éffectués
   private int deplacement;
+  // Permet de savoir si le jeu est en stade intermediaire ou non
   private boolean intermediaire;
+  // Permet de savoir si le jeu est en cours ou non
   private boolean estEnCours;
+  // Permet de savoir si le joueur est en vie
   private boolean estEnVie;
+  // Permet de savoir si le joueur a perdu
   private boolean perdu;
+  // Plateau copie du this.plateau pour pouvoir annuler
+  private ObjetPlateau[][] plateauCopy;
 
   /**
    * Constructeur public : crée un niveau depuis un fichier.
    * 
+   * @param chemin du fichier txt à résoudre
    * @Author DewiGirot
    */
   public Niveau(String chemin) {
@@ -72,6 +82,10 @@ public class Niveau {
   /**
    * Permet de permuter deux objets du plateau
    * 
+   * @param l'objet en coordonées sourceX et sourceY est l'objet du plateau à
+   *                permutter avec l'objet en position destinationX et
+   *                destinationY
+   * 
    * @Author DewiGirot
    */
   private void echanger(int sourceX, int sourceY, int destinationX, int destinationY) {
@@ -106,7 +120,20 @@ public class Niveau {
   }
 
   /*
+   * Patron visiteur de Pomme.
+   * 
+   * @param r est l'objet de type pomme aux coordonnées fournies x et y
+   * 
+   * @Author DewiGirot
+   */
+  public void etatSuivantVisiteur(Pomme p, int x, int y) {
+    // ToDo
+  }
+
+  /*
    * Patron visiteur du Rocher.
+   * 
+   * @param r est l'objet de type rocher aux coordonnées fournies x et y
    * 
    * @Author DewiGirot
    */
@@ -180,18 +207,24 @@ public class Niveau {
   public boolean jouer(Commande c) {
     switch (c) {
       case HAUT:
+        plateauCopy = Utils.cloneTableau(this.plateau);
         deplacer(-1, 0);
         break;
       case GAUCHE:
+        plateauCopy = Utils.cloneTableau(this.plateau);
         deplacer(0, -1);
         break;
       case BAS:
+        plateauCopy = Utils.cloneTableau(this.plateau);
         deplacer(1, 0);
         break;
       case DROITE:
+        plateauCopy = Utils.cloneTableau(this.plateau);
         deplacer(0, 1);
         break;
       case ANNULER:
+        // Problem here
+        // this.plateau = Utils.cloneTableau(this.plateauCopy);
         break;
       case QUITTER:
         this.estEnCours = false;
@@ -273,8 +306,6 @@ public class Niveau {
    * Affiche l'état final (gagné ou perdu) une fois le jeu terminé.
    * 
    * @Author DewiGirot
-   * @return retourne "gagné" si la partie n'est plus en cours sinon retourne
-   *         "perdu"
    */
   public void afficherEtatFinal() {
     if (this.estEnVie == true) {

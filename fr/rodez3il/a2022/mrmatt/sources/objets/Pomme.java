@@ -26,4 +26,17 @@ public class Pomme extends ObjetPlateau {
   public boolean estMarchable() {
     return true;
   }
+
+  /*
+   * Permet d'utiliser le patron de conception Visiteur pour une pomme
+   * 
+   * @param niveau est le niveau actuel joué par le joueur, x et y sont les
+   * coordonnées pour lesquelles on va vérifier l'état d'une pomme et appliquer
+   * des traitements ou non dans la fonction etatSuivantVisiteur.
+   * 
+   * @Author DewiGirot
+   */
+  public void visiterPlateauCalculEtatSuivant(Niveau niveau, int x, int y) {
+    niveau.etatSuivantVisiteur(this, x, y);
+  }
 }
