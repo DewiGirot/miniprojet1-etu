@@ -108,7 +108,7 @@ public class Niveau {
    */
   public void etatSuivantVisiteur(Rocher r, int x, int y) {
     if (r.getEtat() == EtatRocher.FIXE) {
-      if (this.plateau[x][y + 1].estVide()) {
+      if ((y + 1 < this.plateau[x].length) && this.plateau[x][y + 1].estVide()) {
         r.setEtat(EtatRocher.CHUTE);
       }
     }
@@ -129,13 +129,12 @@ public class Niveau {
             r.setEtat(EtatRocher.FIXE);
           }
         }
+      } else {
+        r.setEtat(EtatRocher.FIXE);
       }
-
     }
     if (r.getEtat() == EtatRocher.CHUTE) {
       this.intermediaire = true;
-    } else {
-      this.intermediaire = false;
     }
   }
 
